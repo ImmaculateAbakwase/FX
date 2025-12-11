@@ -108,7 +108,11 @@ const handleLogin = (): void => {
   console.log('Login attempt:', formData.value)
   // Add your authentication logic here
   // Example: await authService.login(formData.value)
-  router.push('/dashboard') // Redirect to dashboard after successful login
+  // For now, navigate to OTP verification screen
+  router.push({
+    path: '/auth/otp-verification',
+    query: { email: formData.value.email }
+  })
 }
 
 const goToForgotPassword = (): void => {

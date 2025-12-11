@@ -16,6 +16,13 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: 'Forgot Password - KFLIX', requiresAuth: false }
   },
 
+  {
+    path: '/auth/otp-verification',
+    name: 'OtpVerification',
+    component: () => import('../views/auth/OtpVerification.vue'),
+    meta: { title: 'OTP Verification - KFLIX', requiresAuth: false }
+  },
+
   // Admin layout shell and child pages
   {
     path: '/',
