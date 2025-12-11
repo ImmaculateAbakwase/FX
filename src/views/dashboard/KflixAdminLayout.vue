@@ -38,6 +38,10 @@
                   <i class="bi-person-plus"></i>
                   <span>Create User</span>
                 </button>
+                <button class="profile-menu-item" @click="handleResetPassword">
+                  <i class="bi-key"></i>
+                  <span>Reset Password</span>
+                </button>
                 <button class="profile-menu-item" @click="handleLogout">
                   <i class="bi-box-arrow-right"></i>
                   <span>Log out</span>
@@ -390,6 +394,11 @@ const handleLogout = () => {
 const handleCreateUser = () => {
   showProfileMenu.value = false
   router.push('/admin/users/create')
+}
+
+const handleResetPassword = () => {
+  showProfileMenu.value = false
+  router.push('/auth/reset-password')
 }
 </script>
 

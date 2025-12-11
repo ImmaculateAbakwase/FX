@@ -23,6 +23,13 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
+    path: '/auth/reset-password',
+    name: 'ResetPassword',
+    component: () => import('../views/auth/ResetPassword.vue'),
+    meta: { title: 'Reset Password - KFLIX', requiresAuth: false }
+  },
+
+  {
     path: '/auth/otp-verification',
     name: 'OtpVerification',
     component: () => import('../views/auth/OtpVerification.vue'),
