@@ -30,19 +30,27 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Auth pages use main-content expanded but should ignore dashboard sidebar offsets */
+html, body {
+  height: 100%;
+  overflow: hidden; /* prevent page from moving; only auth-content may scroll */
+}
+
+/* Auth pages use main-content expanded but should ignore dashboard sidebar offsets
+   and must not scroll the page itself */
 .main-content.expanded {
   margin-left: 0 !important;
   width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
-/* Main wrapper for auth pages - centers everything BELOW navbar */
+/* Main wrapper for auth pages - fully static, centered, no scroll */
 .auth-page-wrapper {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px 16px;
+  padding: 0 16px;
   background: var(--dark-bg);
   overflow: hidden; /* No scroll on wrapper */
 }
