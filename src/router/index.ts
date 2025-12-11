@@ -2,6 +2,12 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
+  // Default entry -> Login
+  {
+    path: '/',
+    redirect: '/auth/login'
+  },
+
   // Auth routes (outside admin layout)
   {
     path: '/auth/login',
@@ -25,14 +31,14 @@ const routes: Array<RouteRecordRaw> = [
 
   // Admin layout shell and child pages
   {
-    path: '/',
+    path: '/admin',
     component: () => import('../views/dashboard/KflixAdminLayout.vue'),
     meta: { requiresAuth: true },
     children: [
       // Default redirect to dashboard
-      { path: '', redirect: '/dashboard' },
+      { path: '', redirect: '/admin/dashboard' },
 
-      // Dashboard (layout renders dashboard content when path === '/dashboard')
+      // Dashboard (layout renders dashboard content when path === '/admin/dashboard')
       {
         path: 'dashboard',
         name: 'Dashboard',
@@ -66,12 +72,20 @@ const routes: Array<RouteRecordRaw> = [
         name: 'AddGame',
         component: () => import('../views/gaming/AddGame.vue'),
         meta: { title: 'Add New Game - KFLIX', requiresAuth: true }
+      },
+
+      // User management - Create User page
+      {
+        path: 'users/create',
+        name: 'CreateUser',
+        component: () => import('../views/dashboard/CreateUser.vue'),
+        meta: { title: 'Create User - KFLIX', requiresAuth: true }
       }
     ]
   },
 
-  // Catch-all -> dashboard (or a 404 page if available)
-  { path: '/:pathMatch(.*)*', redirect: '/dashboard' }
+  // Catch-all -> Login (or a 404 page if available)
+  { path: '/:pathMatch(.*)*', redirect: '/auth/login' }
 ]
 
 const router = createRouter({

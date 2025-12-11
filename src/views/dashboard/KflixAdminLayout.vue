@@ -28,7 +28,22 @@
               <p class="user-name">Lucius King</p>
               <p class="user-role">Super Admin</p>
             </div>
-            <div class="kflix-user-avatar">LK</div>
+            <div class="kflix-user-avatar" @click="toggleProfileMenu">
+              LK
+            </div>
+
+            <transition name="fade">
+              <div v-if="showProfileMenu" class="profile-menu">
+                <button class="profile-menu-item" @click="handleCreateUser">
+                  <i class="bi-person-plus"></i>
+                  <span>Create User</span>
+                </button>
+                <button class="profile-menu-item" @click="handleLogout">
+                  <i class="bi-box-arrow-right"></i>
+                  <span>Log out</span>
+                </button>
+              </div>
+            </transition>
           </div>
         </div>
       </div>
@@ -100,8 +115,8 @@
     <!-- Main Content -->
     <main class="kflix-main" :class="{ 'kflix-main-with-sidebar': sidebarOpen }">
       <div class="kflix-main-inner">
-        <!-- Only show dashboard content on /dashboard -->
-        <template v-if="$route.path === '/dashboard'">
+        <!-- Only show dashboard content on /admin/dashboard -->
+        <template v-if="$route.path === '/admin/dashboard'">
           <div class="kflix-main-header">
             <h2 class="welcome-title">Welcome back, Lucius!</h2>
             <p class="welcome-subtitle">Here's what's happening with KFLIX today.</p>
@@ -159,6 +174,8 @@ const route = useRoute()
 // Sidebar state
 const sidebarOpen = ref(true)
 const activeItem = ref('dashboard')
+const showProfileMenu = ref(false)
+
 const expandedMenus = reactive<Record<string, boolean>>({
   streaming: true,
   gaming: false
@@ -186,18 +203,18 @@ const menuItems: MenuItem[] = [
     id: 'dashboard',
     label: 'Dashboard',
     icon: 'bi-speedometer2',
-    path: '/dashboard'
+    path: '/admin/dashboard'
   },
   {
     id: 'users',
     label: 'User Management',
     icon: 'bi-people',
     submenu: [
-      { id: 'users-list', label: 'Users List', icon: 'bi-people', path: '/users' },
-      { id: 'users-profile', label: 'View Profile', icon: 'bi-person', path: '/users/profile' },
-      { id: 'users-devices', label: 'Devices & Sessions', icon: 'bi-phone', path: '/users/devices' },
-      { id: 'users-roles', label: 'Roles & Permissions', icon: 'bi-shield-lock', path: '/users/roles' },
-      { id: 'users-kyc', label: 'KYC Verification', icon: 'bi-file-earmark-text', path: '/users/kyc' }
+      { id: 'users-list', label: 'Users List', icon: 'bi-people', path: '/admin/users' },
+      { id: 'users-profile', label: 'View Profile', icon: 'bi-person', path: '/admin/users/profile' },
+      { id: 'users-devices', label: 'Devices & Sessions', icon: 'bi-phone', path: '/admin/users/devices' },
+      { id: 'users-roles', label: 'Roles & Permissions', icon: 'bi-shield-lock', path: '/admin/users/roles' },
+      { id: 'users-kyc', label: 'KYC Verification', icon: 'bi-file-earmark-text', path: '/admin/users/kyc' }
     ]
   },
   {
@@ -205,12 +222,12 @@ const menuItems: MenuItem[] = [
     label: 'Creator Management',
     icon: 'bi-camera-video',
     submenu: [
-      { id: 'creators-list', label: 'Creator List', icon: 'bi-people', path: '/creators' },
-      { id: 'creators-kyc', label: 'KYC Submissions', icon: 'bi-file-earmark-text', path: '/creators/kyc' },
-      { id: 'creators-tiers', label: 'Creator Tiers', icon: 'bi-star', path: '/creators/tiers' },
-      { id: 'creators-channels', label: 'Channel Management', icon: 'bi-layers', path: '/creators/channels' },
-      { id: 'creators-strikes', label: 'Strike Policy', icon: 'bi-flag', path: '/creators/strikes' },
-      { id: 'creators-revenue', label: 'Revenue & Payouts', icon: 'bi-wallet2', path: '/creators/revenue' }
+      { id: 'creators-list', label: 'Creator List', icon: 'bi-people', path: '/admin/creators' },
+      { id: 'creators-kyc', label: 'KYC Submissions', icon: 'bi-file-earmark-text', path: '/admin/creators/kyc' },
+      { id: 'creators-tiers', label: 'Creator Tiers', icon: 'bi-star', path: '/admin/creators/tiers' },
+      { id: 'creators-channels', label: 'Channel Management', icon: 'bi-layers', path: '/admin/creators/channels' },
+      { id: 'creators-strikes', label: 'Strike Policy', icon: 'bi-flag', path: '/admin/creators/strikes' },
+      { id: 'creators-revenue', label: 'Revenue & Payouts', icon: 'bi-wallet2', path: '/admin/creators/revenue' }
     ]
   },
   {
@@ -218,12 +235,12 @@ const menuItems: MenuItem[] = [
     label: 'Video Streaming',
     icon: 'bi-play-btn',
     submenu: [
-      { id: 'streaming-assets', label: 'Video Assets', icon: 'bi-collection-play', path: '/video-streaming/list' },
-      { id: 'add-video', label: 'Add New Video', icon: 'bi-upload', path: '/video-streaming/add-video' },
-      { id: 'add-episode', label: 'Add Episode', icon: 'bi-plus-circle', path: '/video-streaming/add-episode' },
-      { id: 'live-event', label: 'Create Live Event', icon: 'bi-broadcast', path: '/video-streaming/create-live-event' },
-      { id: 'live-events-list', label: 'Live Events List', icon: 'bi-calendar-event', path: '/video-streaming/live-events' },
-      { id: 'streaming-mux', label: 'Mux Asset Control', icon: 'bi-cloud', path: '/video-streaming/mux' }
+      { id: 'streaming-assets', label: 'Video Assets', icon: 'bi-collection-play', path: '/admin/video-streaming/list' },
+      { id: 'add-video', label: 'Add New Video', icon: 'bi-upload', path: '/admin/video-streaming/add-video' },
+      { id: 'add-episode', label: 'Add Episode', icon: 'bi-plus-circle', path: '/admin/video-streaming/add-episode' },
+      { id: 'live-event', label: 'Create Live Event', icon: 'bi-broadcast', path: '/admin/video-streaming/create-live-event' },
+      { id: 'live-events-list', label: 'Live Events List', icon: 'bi-calendar-event', path: '/admin/video-streaming/live-events' },
+      { id: 'streaming-mux', label: 'Mux Asset Control', icon: 'bi-cloud', path: '/admin/video-streaming/mux' }
     ]
   },
   {
@@ -231,11 +248,11 @@ const menuItems: MenuItem[] = [
     label: 'KFLIX Music',
     icon: 'bi-music-note-beamed',
     submenu: [
-      { id: 'music-spotify', label: 'Spotify Integration', icon: 'bi-lightning-charge', path: '/music/spotify' },
-      { id: 'music-tracks', label: 'Track Browser', icon: 'bi-music-note-list', path: '/music/tracks' },
-      { id: 'music-playlists', label: 'Playlist Management', icon: 'bi-collection', path: '/music/playlists' },
-      { id: 'music-rooms', label: 'Listening Rooms', icon: 'bi-headphones', path: '/music/rooms' },
-      { id: 'music-artists', label: 'Artist Profiles', icon: 'bi-star', path: '/music/artists' }
+      { id: 'music-spotify', label: 'Spotify Integration', icon: 'bi-lightning-charge', path: '/admin/music/spotify' },
+      { id: 'music-tracks', label: 'Track Browser', icon: 'bi-music-note-list', path: '/admin/music/tracks' },
+      { id: 'music-playlists', label: 'Playlist Management', icon: 'bi-collection', path: '/admin/music/playlists' },
+      { id: 'music-rooms', label: 'Listening Rooms', icon: 'bi-headphones', path: '/admin/music/rooms' },
+      { id: 'music-artists', label: 'Artist Profiles', icon: 'bi-star', path: '/admin/music/artists' }
     ]
   },
   {
@@ -243,13 +260,13 @@ const menuItems: MenuItem[] = [
     label: 'KFLIX Play',
     icon: 'bi-controller',
     submenu: [
-      { id: 'game-add', label: 'Add New Game', icon: 'bi-plus-circle', path: '/gaming/add-game' },
-      { id: 'game-list', label: 'Mini-Games List', icon: 'bi-controller', path: '/gaming/list' },
-      { id: 'game-approve', label: 'Approve Games', icon: 'bi-check-circle', path: '/gaming/approve-game' },
-      { id: 'gaming-leaderboards', label: 'Leaderboards', icon: 'bi-trophy', path: '/gaming/leaderboards' },
-      { id: 'gaming-rewards', label: 'Rewards & XP', icon: 'bi-star', path: '/gaming/rewards' },
-      { id: 'gaming-rooms', label: 'Multiplayer Rooms', icon: 'bi-people', path: '/gaming/rooms' },
-      { id: 'gaming-tournaments', label: 'Tournaments', icon: 'bi-trophy', path: '/gaming/tournaments' }
+      { id: 'game-add', label: 'Add New Game', icon: 'bi-plus-circle', path: '/admin/gaming/add-game' },
+      { id: 'game-list', label: 'Mini-Games List', icon: 'bi-controller', path: '/admin/gaming/list' },
+      { id: 'game-approve', label: 'Approve Games', icon: 'bi-check-circle', path: '/admin/gaming/approve-game' },
+      { id: 'gaming-leaderboards', label: 'Leaderboards', icon: 'bi-trophy', path: '/admin/gaming/leaderboards' },
+      { id: 'gaming-rewards', label: 'Rewards & XP', icon: 'bi-star', path: '/admin/gaming/rewards' },
+      { id: 'gaming-rooms', label: 'Multiplayer Rooms', icon: 'bi-people', path: '/admin/gaming/rooms' },
+      { id: 'gaming-tournaments', label: 'Tournaments', icon: 'bi-trophy', path: '/admin/gaming/tournaments' }
     ]
   },
   {
@@ -257,11 +274,11 @@ const menuItems: MenuItem[] = [
     label: 'Community Moderation',
     icon: 'bi-shield-check',
     submenu: [
-      { id: 'mod-videos', label: 'Reported Videos', icon: 'bi-camera-video-off', path: '/moderation/videos' },
-      { id: 'mod-comments', label: 'Reported Comments', icon: 'bi-chat-left-text', path: '/moderation/comments' },
-      { id: 'mod-chats', label: 'Reported Chats', icon: 'bi-chat-dots', path: '/moderation/chats' },
-      { id: 'mod-profiles', label: 'Reported Profiles', icon: 'bi-person-x', path: '/moderation/profiles' },
-      { id: 'mod-actions', label: 'Moderation Actions', icon: 'bi-shield-lock', path: '/moderation/actions' }
+      { id: 'mod-videos', label: 'Reported Videos', icon: 'bi-camera-video-off', path: '/admin/moderation/videos' },
+      { id: 'mod-comments', label: 'Reported Comments', icon: 'bi-chat-left-text', path: '/admin/moderation/comments' },
+      { id: 'mod-chats', label: 'Reported Chats', icon: 'bi-chat-dots', path: '/admin/moderation/chats' },
+      { id: 'mod-profiles', label: 'Reported Profiles', icon: 'bi-person-x', path: '/admin/moderation/profiles' },
+      { id: 'mod-actions', label: 'Moderation Actions', icon: 'bi-shield-lock', path: '/admin/moderation/actions' }
     ]
   },
   {
@@ -269,10 +286,10 @@ const menuItems: MenuItem[] = [
     label: 'Homepage & Curation',
     icon: 'bi-graph-up-arrow',
     submenu: [
-      { id: 'home-banners', label: 'Featured Banners', icon: 'bi-stars', path: '/homepage/banners' },
-      { id: 'home-trending', label: 'Trending Rows', icon: 'bi-graph-up', path: '/homepage/trending' },
-      { id: 'home-editor', label: 'Row Editor', icon: 'bi-layers', path: '/homepage/editor' },
-      { id: 'home-schedule', label: 'Schedule Changes', icon: 'bi-box', path: '/homepage/schedule' }
+      { id: 'home-banners', label: 'Featured Banners', icon: 'bi-stars', path: '/admin/homepage/banners' },
+      { id: 'home-trending', label: 'Trending Rows', icon: 'bi-graph-up', path: '/admin/homepage/trending' },
+      { id: 'home-editor', label: 'Row Editor', icon: 'bi-layers', path: '/admin/homepage/editor' },
+      { id: 'home-schedule', label: 'Schedule Changes', icon: 'bi-box', path: '/admin/homepage/schedule' }
     ]
   },
   {
@@ -280,12 +297,12 @@ const menuItems: MenuItem[] = [
     label: 'Store & Commerce',
     icon: 'bi-bag-check',
     submenu: [
-      { id: 'store-plans', label: 'Plans & Pricing', icon: 'bi-credit-card', path: '/store/plans' },
-      { id: 'store-payments', label: 'Payment Gateway', icon: 'bi-credit-card-2-front', path: '/store/payments' },
-      { id: 'store-transactions', label: 'Transaction Logs', icon: 'bi-receipt', path: '/store/transactions' },
-      { id: 'store-ppv', label: 'PPV & Bundles', icon: 'bi-ticket-perforated', path: '/store/ppv' },
-      { id: 'store-merch', label: 'Merchandise', icon: 'bi-bag', path: '/store/merch' },
-      { id: 'store-wallet', label: 'Wallet Management', icon: 'bi-wallet2', path: '/store/wallet' }
+      { id: 'store-plans', label: 'Plans & Pricing', icon: 'bi-credit-card', path: '/admin/store/plans' },
+      { id: 'store-payments', label: 'Payment Gateway', icon: 'bi-credit-card-2-front', path: '/admin/store/payments' },
+      { id: 'store-transactions', label: 'Transaction Logs', icon: 'bi-receipt', path: '/admin/store/transactions' },
+      { id: 'store-ppv', label: 'PPV & Bundles', icon: 'bi-ticket-perforated', path: '/admin/store/ppv' },
+      { id: 'store-merch', label: 'Merchandise', icon: 'bi-bag', path: '/admin/store/merch' },
+      { id: 'store-wallet', label: 'Wallet Management', icon: 'bi-wallet2', path: '/admin/store/wallet' }
     ]
   },
   {
@@ -293,9 +310,9 @@ const menuItems: MenuItem[] = [
     label: 'Support & Ticketing',
     icon: 'bi-life-preserver',
     submenu: [
-      { id: 'support-inbox', label: 'Ticket Inbox', icon: 'bi-inbox', path: '/support/inbox' },
-      { id: 'support-assign', label: 'Assign Tickets', icon: 'bi-person-check', path: '/support/assign' },
-      { id: 'support-sla', label: 'SLA Monitoring', icon: 'bi-bar-chart', path: '/support/sla' }
+      { id: 'support-inbox', label: 'Ticket Inbox', icon: 'bi-inbox', path: '/admin/support/inbox' },
+      { id: 'support-assign', label: 'Assign Tickets', icon: 'bi-person-check', path: '/admin/support/assign' },
+      { id: 'support-sla', label: 'SLA Monitoring', icon: 'bi-bar-chart', path: '/admin/support/sla' }
     ]
   },
   {
@@ -303,35 +320,35 @@ const menuItems: MenuItem[] = [
     label: 'Notifications',
     icon: 'bi-bell',
     submenu: [
-      { id: 'notif-push', label: 'Push Notifications', icon: 'bi-bell', path: '/notifications/push' },
-      { id: 'notif-email', label: 'Email Templates', icon: 'bi-envelope', path: '/notifications/email' },
-      { id: 'notif-sms', label: 'SMS Templates', icon: 'bi-chat-text', path: '/notifications/sms' },
-      { id: 'notif-system', label: 'System Messages', icon: 'bi-info-circle', path: '/notifications/system' }
+      { id: 'notif-push', label: 'Push Notifications', icon: 'bi-bell', path: '/admin/notifications/push' },
+      { id: 'notif-email', label: 'Email Templates', icon: 'bi-envelope', path: '/admin/notifications/email' },
+      { id: 'notif-sms', label: 'SMS Templates', icon: 'bi-chat-text', path: '/admin/notifications/sms' },
+      { id: 'notif-system', label: 'System Messages', icon: 'bi-info-circle', path: '/admin/notifications/system' }
     ]
   },
   {
     id: 'analytics',
     label: 'Analytics & Reports',
     icon: 'bi-bar-chart-line',
-    path: '/analytics'
+    path: '/admin/analytics'
   },
   {
     id: 'integrations',
     label: 'Integrations',
     icon: 'bi-lightning-charge',
-    path: '/integrations'
+    path: '/admin/integrations'
   },
   {
     id: 'settings',
     label: 'Platform Settings',
     icon: 'bi-gear',
-    path: '/settings'
+    path: '/admin/settings'
   },
   {
     id: 'security',
     label: 'Security & Compliance',
     icon: 'bi-shield-lock',
-    path: '/security'
+    path: '/admin/security'
   }
 ]
 
@@ -360,6 +377,20 @@ const navigateTo = (path: string, id: string) => {
   router.push(path)
   activeItem.value = id
 }
+
+const toggleProfileMenu = () => {
+  showProfileMenu.value = !showProfileMenu.value
+}
+
+const handleLogout = () => {
+  showProfileMenu.value = false
+  router.push('/auth/login')
+}
+
+const handleCreateUser = () => {
+  showProfileMenu.value = false
+  router.push('/admin/users/create')
+}
 </script>
 
 <style scoped src="@/assets/styles/DashboardStyles.css"></style>
@@ -380,5 +411,60 @@ const navigateTo = (path: string, id: string) => {
 .slide-leave-from {
   max-height: 600px;
   opacity: 1;
+}
+
+.profile-menu {
+  position: absolute;
+  right: 0;
+  top: 120%;
+  min-width: 190px;
+  background: #111827;
+  border-radius: 0.75rem;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+  padding: 0.35rem 0.35rem 0.4rem;
+  z-index: 40;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.profile-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.6rem;
+  background: transparent;
+  border: none;
+  color: #e5e7eb;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
+}
+
+.profile-menu-item i {
+  font-size: 1rem;
+}
+
+.profile-menu-item:hover {
+  background: linear-gradient(90deg, rgba(248, 113, 113, 0.1), rgba(59, 130, 246, 0.18));
+  color: #f9fafb;
+  transform: translateY(-1px);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

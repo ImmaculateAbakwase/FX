@@ -143,8 +143,9 @@ const handleVerify = () => {
   const otp = otpDigits.value.join('')
   console.log('Verify OTP:', otp, 'for', email.value)
   // TODO: call API to verify OTP
-  router.push('/dashboard')
+  router.push('/admin/dashboard')
 }
+
 
 const goBackToLogin = () => {
   router.push({ path: '/auth/login', query: { email: email.value || '' } })
