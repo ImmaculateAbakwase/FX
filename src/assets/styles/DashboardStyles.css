@@ -175,6 +175,7 @@
   font-size: 13px;
   font-weight: 700;
   background: linear-gradient(135deg, #ff3d3d, #e91e63, #2196f3);
+  cursor: pointer;
 }
 
 .kflix-sidebar {
