@@ -2,7 +2,7 @@
   <div class="main-content expanded">
 
     <div class="auth-page-wrapper">
-      <div class="auth-container">
+      <div class="auth-container auth-container--scrollable">
         <div class="auth-background">
           <div class="gradient-orb orb-1"></div>
           <div class="gradient-orb orb-2"></div>
