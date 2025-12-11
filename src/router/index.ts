@@ -80,6 +80,62 @@ const routes: Array<RouteRecordRaw> = [
         name: 'CreateUser',
         component: () => import('../views/dashboard/CreateUser.vue'),
         meta: { title: 'Create User - KFLIX', requiresAuth: true }
+      },
+
+      // Users list & detail
+      {
+        path: 'users',
+        name: 'UsersList',
+        component: () => import('../views/users/UsersList.vue'),
+        meta: { title: 'Users - KFLIX', requiresAuth: true }
+      },
+      {
+        path: 'users/:id',
+        name: 'UserDetail',
+        component: () => import('../views/users/UserDetail.vue'),
+        meta: { title: 'User Details - KFLIX', requiresAuth: true }
+      },
+
+      // Movies (video assets) list & detail
+      {
+        path: 'video-streaming/list',
+        name: 'MoviesList',
+        component: () => import('../views/video-streaming/MoviesList.vue'),
+        meta: { title: 'Movies - KFLIX', requiresAuth: true }
+      },
+      {
+        path: 'video-streaming/movies/:id',
+        name: 'MovieDetail',
+        component: () => import('../views/video-streaming/MovieDetail.vue'),
+        meta: { title: 'Movie Details - KFLIX', requiresAuth: true }
+      },
+
+      // Live events list & detail
+      {
+        path: 'video-streaming/live-events',
+        name: 'LiveEventsList',
+        component: () => import('../views/video-streaming/LiveEventsList.vue'),
+        meta: { title: 'Live Events - KFLIX', requiresAuth: true }
+      },
+      {
+        path: 'video-streaming/live-events/:id',
+        name: 'LiveEventDetail',
+        component: () => import('../views/video-streaming/LiveEventDetail.vue'),
+        meta: { title: 'Live Event Details - KFLIX', requiresAuth: true }
+      },
+
+      // Games list & detail
+      {
+        path: 'gaming/list',
+        name: 'GamesList',
+        component: () => import('../views/gaming/GamesList.vue'),
+        meta: { title: 'Games - KFLIX', requiresAuth: true }
+      },
+      {
+        path: 'gaming/list/:id',
+        name: 'GameDetail',
+        component: () => import('../views/gaming/GameDetail.vue'),
+        meta: { title: 'Game Details - KFLIX', requiresAuth: true }
       }
     ]
   },
