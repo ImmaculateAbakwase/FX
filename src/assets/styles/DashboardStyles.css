@@ -658,6 +658,17 @@
   border-color: #b91c1c;
 }
 
+/* Light theme: make chart filter (View All) a simple text link */
+:root.light .chart-filter {
+  background: transparent;
+  border: none;
+  color: #111827;
+  padding: 0;
+  margin-top: 4px;
+  text-decoration: underline;
+  box-shadow: none;
+}
+
 .chart-card.span-8 {
   grid-column: span 8;
 }

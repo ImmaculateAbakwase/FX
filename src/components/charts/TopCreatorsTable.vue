@@ -2,7 +2,7 @@
   <div class="chart-card span-8">
     <div class="chart-header">
       <h3 class="chart-title">Top Performing Creators</h3>
-      <button class="chart-filter">View All</button>
+      <button class="chart-filter chart-filter-link">View All</button>
     </div>
     <div class="list-container">
       <div
@@ -137,5 +137,48 @@ const topCreators: Creator[] = [
   font-size: 11px;
   color: #9ca3af;
   margin: 0;
+}
+
+/* Light theme overrides */
+:global(html.light) .list-item {
+  background: #e5e7eb !important;
+  border-color: #d1d5db !important;
+}
+
+:global(html.light) .list-item-info h4,
+:global(html.light) .list-item-stat-value:not(.revenue) {
+  color: #000000 !important;
+}
+
+:global(html.light) .list-item-info p,
+:global(html.light) .list-item-stat-label {
+  color: #000000 !important;
+}
+
+/* In light mode, keep revenue amount readable on grey background */
+:global(html.light) .list-item-stat-value.revenue {
+  color: #ffffff !important;
+}
+
+/* Local styling for the View All link in this card */
+.chart-filter-link {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: auto;
+  align-self: flex-start;
+}
+
+:global(html.light) .chart-filter-link {
+  color: #000000 !important;
+  text-decoration: underline !important;
+  margin-top: 4px;
+}
+
+:global(html.dark) .chart-filter-link {
+  color: #ffffff !important;
+  text-decoration: underline !important;
 }
 </style>
