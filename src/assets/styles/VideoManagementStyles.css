@@ -9,6 +9,12 @@
   min-height: 100vh;
 }
 
+/* Light theme overrides for video management page */
+:root.light .video-management-page {
+  background: #ffffff;
+  border-color: rgba(209, 213, 219, 1);
+}
+
 /* Section headers for clarity */
 .section-title {
   display: flex;
@@ -37,6 +43,11 @@
   border-radius: 14px;
   padding: 16px;
   background: rgba(0, 0, 0, 0.35);
+}
+
+:root.light :deep(.upload-group) {
+  background: #f9fafb;
+  border-color: rgba(209, 213, 219, 1);
 }
 
 :deep(.upload-group + .upload-group) { margin-top: 12px; }
@@ -171,6 +182,15 @@
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4); /* subtle depth */
 }
 
+:root.light .form-input,
+:root.light .form-select,
+:root.light .form-textarea {
+  background: #ffffff;
+  border-color: rgba(209, 213, 219, 1);
+  color: #111827;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
 .form-input::placeholder,
 .form-textarea::placeholder {
   color: #cbd5e1; /* brighter placeholder for readability */
@@ -266,6 +286,12 @@
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 14px;
+}
+
+:root.light .genre-checkbox,
+:root.light .region-checkbox {
+  background: #f9fafb;
+  border-color: rgba(209, 213, 219, 1);
 }
 
 .genre-checkbox:hover,

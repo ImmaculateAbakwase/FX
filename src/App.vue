@@ -10,7 +10,7 @@
 .app-container {
   display: flex;
   min-height: 100vh;
-  background: #0a0a0a;
-  color: #fff;
+  background: var(--dark-bg);
+  color: var(--text-primary);
 }
 </style>

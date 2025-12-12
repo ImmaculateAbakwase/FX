@@ -19,6 +19,14 @@
           </div>
         </div>
         <div class="kflix-navbar-right">
+          <button class="admin-theme-toggle" @click="themeStore.toggleTheme" :aria-pressed="!themeStore.isDark" title="Toggle theme">
+            <span class="admin-theme-toggle-track">
+              <span
+                class="admin-theme-toggle-thumb"
+                :class="{ 'admin-theme-toggle-thumb--light': !themeStore.isDark }"
+              ></span>
+            </span>
+          </button>
           <button class="icon-button notification-button">
             <i class="bi-bell icon"></i>
             <span class="notification-dot"></span>
@@ -162,6 +170,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useThemeStore } from '@/stores/theme'
 
 // Import your chart components
 import RevenueChart from '@/components/charts/RevenueChart.vue'
@@ -174,6 +183,7 @@ import PlatformMetricsChart from '@/components/charts/PlatformMetricsChart.vue'
 
 const router = useRouter()
 const route = useRoute()
+const themeStore = useThemeStore()
 
 // Sidebar state
 const sidebarOpen = ref(true)
