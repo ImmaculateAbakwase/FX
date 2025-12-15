@@ -97,7 +97,7 @@
           <FileUpload 
             label="Upload Episode Video"
             accept="video/*"
-            @change="(file) => formData.videoFile = file"
+            @update:file="(file: File | null) => (formData.videoFile = file)"
           />
           <div v-if="formData.videoFile" class="file-info">
             <i class="bi-file-earmark-play"></i>

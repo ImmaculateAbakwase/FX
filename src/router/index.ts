@@ -1,5 +1,6 @@
 // router/index.ts
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { buildSettingsRoutes } from '../views/settings/settingsRoutes'
 
 const routes: Array<RouteRecordRaw> = [
   // Default entry -> Login
@@ -59,12 +60,6 @@ const routes: Array<RouteRecordRaw> = [
         name: 'AddNewVideo',
         component: () => import('../views/video-streaming/AddNewVideo.vue'),
         meta: { title: 'Add New Video - KFLIX', requiresAuth: true }
-      },
-      {
-        path: 'video-streaming/add-episode',
-        name: 'AddEpisode',
-        component: () => import('../views/video-streaming/AddEpisode.vue'),
-        meta: { title: 'Add Episode - KFLIX', requiresAuth: true }
       },
       {
         path: 'video-streaming/create-live-event',
@@ -143,7 +138,9 @@ const routes: Array<RouteRecordRaw> = [
         name: 'GameDetail',
         component: () => import('../views/gaming/GameDetail.vue'),
         meta: { title: 'Game Details - KFLIX', requiresAuth: true }
-      }
+      },
+
+      ...buildSettingsRoutes()
     ]
   },
 

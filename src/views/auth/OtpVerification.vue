@@ -26,9 +26,9 @@
 
             <div class="otp-input-row">
               <input
-                v-for="(digit, index) in otpDigits"
+                v-for="(_, index) in otpDigits"
                 :key="index"
-                ref="setOtpInputRefs"
+                ref="otpInputRefs"
                 type="text"
                 inputmode="numeric"
                 maxlength="1"
@@ -84,11 +84,6 @@ const email = ref<string | null>((route.query.email as string) || null)
 
 const otpDigits = ref<string[]>(['', '', '', '', '', ''])
 const otpInputRefs = ref<HTMLInputElement[]>([])
-const setOtpInputRefs = (el: HTMLInputElement | null) => {
-  if (el && !otpInputRefs.value.includes(el)) {
-    otpInputRefs.value.push(el)
-  }
-}
 
 const isResendDisabled = ref(true)
 const remainingTime = ref(30)

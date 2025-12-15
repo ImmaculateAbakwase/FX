@@ -12,6 +12,11 @@ export interface VideoFormData {
   regionLocks: string[];
   ageRating: string;
   subtitles: File[];
+
+  seriesId?: string;
+  episodeNumber?: number;
+  seasonNumber?: number;
+  duration?: string;
 }
 
 export interface EpisodeFormData {

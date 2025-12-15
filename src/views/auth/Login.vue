@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 interface LoginFormData {
   email: string
@@ -91,7 +91,6 @@ interface LoginFormData {
 }
 
 const router = useRouter()
-const route = useRoute()
 
 const formData = ref<LoginFormData>({
   email: '',

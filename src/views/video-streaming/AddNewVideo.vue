@@ -63,12 +63,94 @@
         </FormField>
       </FormSection>
 
+      <FormSection v-if="isSeries" title="Series / Episode Details">
+        <FormField label="Select Series" :required="true">
+          <input
+            v-model="formData.seriesId"
+            class="form-input"
+            list="series-options"
+            placeholder="Type or choose a series..."
+            required
+          />
+          <datalist id="series-options">
+            <option 
+              v-for="series in mockSeries" 
+              :key="series" 
+              :value="series.toLowerCase()"
+            >
+              {{ series }}
+            </option>
+          </datalist>
+        </FormField>
+
+        <div class="form-grid">
+          <FormField label="Season Number" :required="true">
+            <input 
+              v-model.number="formData.seasonNumber"
+              type="number"
+              class="form-input"
+              min="1"
+              required
+            />
+          </FormField>
+
+          <FormField label="Episode Number" :required="true">
+            <input 
+              v-model.number="formData.episodeNumber"
+              type="number"
+              class="form-input"
+              min="1"
+              required
+            />
+          </FormField>
+        </div>
+
+        <div class="form-grid">
+          <FormField label="Duration" :required="true">
+            <input 
+              v-model="formData.duration"
+              type="text"
+              class="form-input"
+              placeholder="e.g., 45:30"
+              required
+            />
+          </FormField>
+        </div>
+
+        <FormField label="Subtitles">
+          <div class="subtitle-uploader">
+            <input 
+              type="file"
+              accept=".srt,.vtt"
+              multiple
+              @change="handleSubtitlesChange"
+              class="file-input-subtitle"
+              id="subtitle-input"
+            />
+            <label for="subtitle-input" class="subtitle-label">
+              <i class="bi-file-text"></i> Upload Subtitle Files (.srt, .vtt)
+            </label>
+            <div v-if="formData.subtitles.length > 0" class="subtitle-list">
+              <div 
+                v-for="(sub, idx) in formData.subtitles" 
+                :key="idx" 
+                class="subtitle-item"
+              >
+                <i class="bi-file-earmark-text"></i>
+                <span>{{ sub.name }}</span>
+              </div>
+            </div>
+          </div>
+        </FormField>
+      </FormSection>
+
       <FormSection title="Media Files">
         <FormField class="upload-group upload-video" label="Video File (will be processed by MUX)" :required="true">
           <FileUpload 
+            :key="videoUploadKey"
             label="Upload Video File"
             accept="video/*"
-            @change="handleVideoFileChange"
+            @update:file="handleVideoFileChange"
           />
           <div v-if="formData.videoFile" class="file-info">
             <i class="bi-file-earmark-play"></i>
@@ -76,6 +158,17 @@
             <span class="file-size">
               ({{ (formData.videoFile.size / 1024 / 1024).toFixed(2) }} MB)
             </span>
+            <button
+              type="button"
+              @click="clearVideoFile"
+              aria-label="Remove uploaded video"
+              style="margin-left: 10px; background: transparent; border: none; color: inherit; cursor: pointer; padding: 0;"
+            >
+              <i class="bi-x-lg"></i>
+            </button>
+          </div>
+          <div v-if="videoPreviewUrl" style="margin-top: 12px;">
+            <video :src="videoPreviewUrl" controls preload="metadata" style="width: 100%; border-radius: 10px;"></video>
           </div>
         </FormField>
 
@@ -85,7 +178,7 @@
               label="Upload Thumbnail"
               accept="image/*"
               :preview="thumbnailPreview"
-              @change="handleThumbnailChange"
+              @update:file="handleThumbnailChange"
             />
           </FormField>
 
@@ -93,7 +186,7 @@
             <FileUpload 
               label="Upload Trailer"
               accept="video/*"
-              @change="(file) => formData.trailer = file"
+              @update:file="(file: File | null) => (formData.trailer = file)"
             />
           </FormField>
         </div>
@@ -166,7 +259,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import PageHeader from '@/components/shared/PageHeader.vue'
 import FormSection from '@/components/shared/FormSection.vue'
@@ -181,6 +274,8 @@ const genres = ['Action', 'Comedy', 'Drama', 'Horror', 'Sci-Fi', 'Romance', 'Thr
 const regions = ['US', 'UK', 'EU', 'Asia', 'Africa', 'South America', 'Australia']
 const ageRatings = ['G', 'PG', 'PG-13', 'R', 'NC-17', 'TV-MA']
 
+const mockSeries = ['Breaking Bad', 'Stranger Things', 'The Crown', 'Mandalorian', 'The Witcher']
+
 const formData = reactive<VideoFormData>({
   title: '',
   description: '',
@@ -192,12 +287,20 @@ const formData = reactive<VideoFormData>({
   accessType: 'free',
   regionLocks: [],
   ageRating: 'G',
-  subtitles: []
+  subtitles: [],
+  seriesId: '',
+  episodeNumber: 1,
+  seasonNumber: 1,
+  duration: ''
 })
 
 const thumbnailPreview = ref('')
+const videoPreviewUrl = ref('')
+const videoUploadKey = ref(0)
 const uploadProgress = ref(0)
 const isUploading = ref(false)
+
+const isSeries = ref(formData.category === 'series')
 
 const handleThumbnailChange = (file: File | null) => {
   formData.thumbnail = file
@@ -214,7 +317,47 @@ const handleThumbnailChange = (file: File | null) => {
 
 const handleVideoFileChange = (file: File | null) => {
   formData.videoFile = file
+  if (videoPreviewUrl.value) {
+    URL.revokeObjectURL(videoPreviewUrl.value)
+    videoPreviewUrl.value = ''
+  }
+  if (file) {
+    videoPreviewUrl.value = URL.createObjectURL(file)
+  }
 }
+
+const clearVideoFile = () => {
+  handleVideoFileChange(null)
+  videoUploadKey.value += 1
+}
+
+const handleSubtitlesChange = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  if (target.files) {
+    formData.subtitles = Array.from(target.files)
+  }
+}
+
+watch(
+  () => formData.category,
+  (cat) => {
+    const nextIsSeries = cat === 'series'
+    isSeries.value = nextIsSeries
+    if (!nextIsSeries) {
+      formData.seriesId = ''
+      formData.episodeNumber = 1
+      formData.seasonNumber = 1
+      formData.duration = ''
+      formData.subtitles = []
+    }
+  }
+)
+
+onBeforeUnmount(() => {
+  if (videoPreviewUrl.value) {
+    URL.revokeObjectURL(videoPreviewUrl.value)
+  }
+})
 
 const handleSubmit = async () => {
   isUploading.value = true

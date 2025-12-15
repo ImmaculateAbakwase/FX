@@ -169,7 +169,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useThemeStore } from '@/stores/theme'
 
 // Import your chart components
@@ -182,7 +182,6 @@ import RecentActivityList from '@/components/charts/RecentActivityList.vue'
 import PlatformMetricsChart from '@/components/charts/PlatformMetricsChart.vue'
 
 const router = useRouter()
-const route = useRoute()
 const themeStore = useThemeStore()
 
 // Sidebar state
@@ -251,7 +250,6 @@ const menuItems: MenuItem[] = [
     submenu: [
       { id: 'streaming-assets', label: 'Video Assets', icon: 'bi-collection-play', path: '/admin/video-streaming/list' },
       { id: 'add-video', label: 'Add New Video', icon: 'bi-upload', path: '/admin/video-streaming/add-video' },
-      { id: 'add-episode', label: 'Add Episode', icon: 'bi-plus-circle', path: '/admin/video-streaming/add-episode' },
       { id: 'live-event', label: 'Create Live Event', icon: 'bi-broadcast', path: '/admin/video-streaming/create-live-event' },
       { id: 'live-events-list', label: 'Live Events List', icon: 'bi-calendar-event', path: '/admin/video-streaming/live-events' },
       { id: 'streaming-mux', label: 'Mux Asset Control', icon: 'bi-cloud', path: '/admin/video-streaming/mux' }

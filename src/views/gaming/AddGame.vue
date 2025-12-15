@@ -91,7 +91,7 @@
           <FileUpload 
             :label="formData.isHTML5 ? 'Upload Game ZIP' : 'Upload Game Package'"
             :accept="formData.isHTML5 ? '.zip' : '*'"
-            @change="(file) => formData.gameFile = file"
+            @update:file="(file: File | null) => (formData.gameFile = file)"
           />
           <div v-if="formData.gameFile" class="file-info">
             <i class="bi-file-earmark-zip"></i>
