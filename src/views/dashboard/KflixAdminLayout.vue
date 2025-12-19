@@ -232,7 +232,7 @@ const menuItems: MenuItem[] = [
   },
   {
     id: 'creators',
-    label: 'Creator Management',
+    label: 'K-Tube',
     icon: 'bi-camera-video',
     submenu: [
       { id: 'creators-list', label: 'Creator List', icon: 'bi-people', path: '/admin/creators' },

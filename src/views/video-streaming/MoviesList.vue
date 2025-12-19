@@ -116,11 +116,17 @@ const page = ref(1)
 const pageSize = 8
 
 const filteredMovies = computed(() => {
-  if (!search.value) return rawMovies
+  let movies = rawMovies.slice() // Create a copy
+  if (!search.value) {
+    // Sort by ID descending (latest first)
+    return movies.sort((a, b) => b.id - a.id)
+  }
   const term = search.value.toLowerCase()
-  return rawMovies.filter((m) => {
+  movies = movies.filter((m) => {
     return m.title.toLowerCase().includes(term) || m.creator.toLowerCase().includes(term)
   })
+  // Sort by ID descending even when searching
+  return movies.sort((a, b) => b.id - a.id)
 })
 
 const totalPages = computed(() => Math.max(1, Math.ceil(filteredMovies.value.length / pageSize)))

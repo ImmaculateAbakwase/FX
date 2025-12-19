@@ -174,13 +174,13 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 24px;
+  gap: 6px;
+  margin-bottom: 18px;
 }
 
 .logo-placeholder {
-  width: 140px;
-  height: 80px;
+  width: 170px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -212,8 +212,8 @@ html, body {
 }
 
 .logo-image {
-  width: 64px;
-  height: 64px;
+  width: 104px;
+  height: 104px;
   object-fit: contain;
 }
 
